@@ -1,0 +1,4 @@
+#ifndef ROOMMANAGER_H
+#define ROOMMANAGER_H
+
+#endif // ROOMMANAGER_H
