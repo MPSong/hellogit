@@ -20,11 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     /*log할 파일 생성 및 open*/
-    QString ApplicationPath=QApplication::applicationDirPath();
-    log=new Logging(ApplicationPath + "log.log");
-    if(!log.openFile()){
+    log=new Logging();
+    if(!log->openFile()){
         QString error;
-        usr.sprintf("cannot open log file");
+        error.sprintf("cannot open log file");
         ui->textEdit->append(error);
     }
 
@@ -40,12 +39,13 @@ void MainWindow::startServer() //서버를 스타트하는 함수
     server.listen(QHostAddress::Any,2402); //포트 2402
     connect(&server,SIGNAL(newConnection()),this,SLOT(addConnection()));
     ui->textEdit->append(QString("wait for client"));
+    log->writeFile(QString("server start"));
 }
 
 /*thread를 위한 함수, 일단 보*/
 void incomingConnection(qintptr socketDescriptor){
-    QString usr;
-    usr.sprintf("%s Connecting...", socketDescriptor);
+    //QString usr;
+    //usr.sprintf("%s Connecting...", socketDescriptor);
    // ChatThread *thread =new ChatThread(socketDescriptor, server);
 
     //connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
@@ -69,7 +69,7 @@ void MainWindow::addConnection()
     QString usr;
     usr.sprintf("%dth usr is added", list.size());
     ui->textEdit->append(usr);
-    log.writeFile(s->Name());
+    //log->writeFile("test is added");
 
     /*client에게 보내는 메시지*/
     QByteArray arr("***welcome to linux chatting world!***\n");

@@ -35,7 +35,7 @@ public slots:
     void removeConnection();
     void recvMsg();
 private:
-    Logging log;  //logging module
+    Logging *log;  //logging module
     QList<QTcpSocket*> list;
     QTcpServer server;
     Ui::MainWindow *ui;

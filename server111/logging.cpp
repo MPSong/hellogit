@@ -7,12 +7,14 @@
 #include <QFile>
 #include <QIODevice>
 #include <QTextStream>
+#include <QApplication>
 #include "logging.h"
 
 
-Logging::Logging(QString filename){  //Creator
+Logging::Logging(){  //Creator
     //loggingFile=new QFile(filename);
-    loggingFile.setFileName(filename);
+    QString ApplicationPath=QApplication::applicationDirPath();
+    loggingFile.setFileName(ApplicationPath + "_log.log");
 }
 
 Logging::~Logging(){
@@ -22,7 +24,7 @@ Logging::~Logging(){
 
 bool Logging::openFile(){
 
-    if(!loggingFile.open(QIODevice::WriteOnly|QIODevice::Append|QFile::Text)) //File open(write and text mode)
+    if(!loggingFile.open(QIODevice::WriteOnly|QIODevice::Append)) //File open(write and text mode)
         return false;
     else
         return true;
@@ -31,5 +33,5 @@ bool Logging::openFile(){
 
 void Logging::writeFile(QString wl){
     QTextStream out(&loggingFile);   //using textStream
-    out<<wl<<"is connected \n";
+    out<<wl<<" is connected \n";
 }

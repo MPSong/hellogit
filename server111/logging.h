@@ -16,7 +16,7 @@ private:
     QFile loggingFile;
 
 public:
-    Logging(QString filename);
+    Logging();
     ~Logging();
     bool openFile();
     void writeFile(QString wl);
