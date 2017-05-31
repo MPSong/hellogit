@@ -17,3 +17,4 @@ void Dialog::on_pushButton_2_clicked()
 {
 
 }
+
