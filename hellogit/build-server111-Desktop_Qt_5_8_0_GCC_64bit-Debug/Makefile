@@ -53,7 +53,8 @@ SOURCES       = ../server111/main.cpp \
 		../server111/chatthread.cpp \
 		../server111/logging.cpp \
 		../server111/roommanager.cpp \
-		../server111/room.cpp moc_mainwindow.cpp \
+		../server111/room.cpp \
+		../server111/chatclient.cpp moc_mainwindow.cpp \
 		moc_chatthread.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
@@ -61,6 +62,7 @@ OBJECTS       = main.o \
 		logging.o \
 		roommanager.o \
 		room.o \
+		chatclient.o \
 		moc_mainwindow.o \
 		moc_chatthread.o
 DIST          = ../../../../Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
@@ -237,12 +239,14 @@ DIST          = ../../../../Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../server111/chatthread.h \
 		../server111/logging.h \
 		../server111/room.h \
-		../server111/roommanager.h ../server111/main.cpp \
+		../server111/roommanager.h \
+		../server111/chatclient.h ../server111/main.cpp \
 		../server111/mainwindow.cpp \
 		../server111/chatthread.cpp \
 		../server111/logging.cpp \
 		../server111/roommanager.cpp \
-		../server111/room.cpp
+		../server111/room.cpp \
+		../server111/chatclient.cpp
 QMAKE_TARGET  = server111
 DESTDIR       = 
 TARGET        = server111
@@ -620,8 +624,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/5.8/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../server111/mainwindow.h ../server111/chatthread.h ../server111/logging.h ../server111/room.h ../server111/roommanager.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../server111/main.cpp ../server111/mainwindow.cpp ../server111/chatthread.cpp ../server111/logging.cpp ../server111/roommanager.cpp ../server111/room.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../server111/mainwindow.h ../server111/chatthread.h ../server111/logging.h ../server111/room.h ../server111/roommanager.h ../server111/chatclient.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../server111/main.cpp ../server111/mainwindow.cpp ../server111/chatthread.cpp ../server111/logging.cpp ../server111/roommanager.cpp ../server111/room.cpp ../server111/chatclient.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../server111/mainwindow.ui $(DISTDIR)/
 
 
@@ -771,6 +775,7 @@ moc_mainwindow.cpp: ../../../../Qt/5.8/gcc_64/include/QtWidgets/QMainWindow \
 		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
 		../server111/roommanager.h \
 		../server111/room.h \
+		../server111/chatclient.h \
 		../server111/logging.h \
 		../../../../Qt/5.8/gcc_64/include/QtCore/QString \
 		../../../../Qt/5.8/gcc_64/include/QtCore/QFile \
@@ -986,6 +991,7 @@ main.o: ../server111/main.cpp ../server111/mainwindow.h \
 		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
 		../server111/roommanager.h \
 		../server111/room.h \
+		../server111/chatclient.h \
 		../server111/logging.h \
 		../../../../Qt/5.8/gcc_64/include/QtCore/QString \
 		../../../../Qt/5.8/gcc_64/include/QtCore/QFile \
@@ -1113,6 +1119,7 @@ mainwindow.o: ../server111/mainwindow.cpp ../server111/mainwindow.h \
 		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
 		../server111/roommanager.h \
 		../server111/room.h \
+		../server111/chatclient.h \
 		../server111/logging.h \
 		../../../../Qt/5.8/gcc_64/include/QtCore/QString \
 		../../../../Qt/5.8/gcc_64/include/QtCore/QFile \
@@ -1354,11 +1361,215 @@ logging.o: ../server111/logging.cpp ../../../../Qt/5.8/gcc_64/include/QtCore/QFi
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o logging.o ../server111/logging.cpp
 
 roommanager.o: ../server111/roommanager.cpp ../server111/roommanager.h \
-		../server111/room.h
+		../server111/room.h \
+		../server111/chatclient.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/QTcpSocket \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o roommanager.o ../server111/roommanager.cpp
 
-room.o: ../server111/room.cpp ../server111/room.h
+room.o: ../server111/room.cpp ../server111/room.h \
+		../server111/chatclient.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/QTcpSocket \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o room.o ../server111/room.cpp
+
+chatclient.o: ../server111/chatclient.cpp ../server111/chatclient.h \
+		../server111/room.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/QTcpSocket \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qglobal.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qconfig.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlogging.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qflags.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmutex.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../../../../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobject.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstring.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qchar.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qiterator.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qpair.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qregexp.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qdebug.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qhash.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qmap.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qlocale.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvariant.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qvector.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qpoint.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qset.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o chatclient.o ../server111/chatclient.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

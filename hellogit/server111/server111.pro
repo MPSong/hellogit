@@ -28,14 +28,16 @@ SOURCES += main.cpp \
     chatthread.cpp \
     logging.cpp \
     roommanager.cpp \
-    room.cpp
+    room.cpp \
+    chatclient.cpp
 
 HEADERS  += \
     mainwindow.h \
     chatthread.h \
     logging.h \
     room.h \
-    roommanager.h
+    roommanager.h \
+    chatclient.h
 
 FORMS    += \
     mainwindow.ui
