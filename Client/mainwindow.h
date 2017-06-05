@@ -41,7 +41,7 @@ private slots:
 
     void on_pushButton_check_2_clicked();
 
-
+     void recvMsg();
 private:
     Ui::MainWindow *ui;
     QSqlDatabase mydb;

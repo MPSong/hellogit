@@ -16,10 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(&socket,SIGNAL(readyRead()),this,SLOT(recvMsg()));
 
     /*데이터베이스 추가 및 경로와 연결*/
     mydb=QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/home/hyomin/user.db");
+    mydb.setDatabaseName("/home/hyomin/ss/hellogit/user.db");
 
     if(!mydb.open())
     {
@@ -89,9 +90,17 @@ void MainWindow::on_pushButton_signin_clicked()
     }
 }
 
+void MainWindow::recvMsg()
+{
+    QTcpSocket *s = (QTcpSocket*)sender();
+    QByteArray arr(s->readAll());
+    QString str(arr);
+    ui->listWidget->addItem(str);
+}
+
 void MainWindow::onSent(const QString& room)
 {
-    QByteArray arr(room.toUtf8());
+    QByteArray arr("$%*2/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
     socket.write(arr);
     socket.flush();
 }
