@@ -9,6 +9,7 @@
 #include "ui_mainwindow.h"
 #include "dialog.h"
 #include <QMessageBox>
+#include <QHostAddress>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -65,6 +66,18 @@ void MainWindow::on_pushButton_signin_clicked()
             QString state = "connected";
             qry.exec("update USER set State = '" + state + "' where UID = '" + id + "'");
 
+            QString host_str("127.0.1.0");
+            QHostAddress host(host_str);
+            int port =2402;
+            socket.connectToHost(host,port);
+
+            /*입력받은 id의 닉네임 검색후 page_3, page_4에 환영 문구 씀*/
+            qry.exec("select Nickname from USER where UID='"+ id +"'");
+            qry.next();
+            QString nickname = qry.value(0).toString();
+            ui->label_welcome->setText(nickname + " welcome!");
+            ui->label_welcome_2->setText(nickname + " welcome!");
+
             //page_3로 이동
             ui->stackedWidget->setCurrentWidget(ui->page_3);
         }
@@ -74,21 +87,22 @@ void MainWindow::on_pushButton_signin_clicked()
            QMessageBox::warning(this,tr("Error"),tr("Please check your id and password again"));
         }
     }
+}
 
-    /*입력받은 id의 닉네임 검색후 page_3, page_4에 환영 문구 씀*/
-    qry.exec("select Nickname from USER where UID='"+ id +"'");
-    qry.next();
-    QString nickname = qry.value(0).toString();
-    ui->label_welcome->setText(nickname + " welcome!");
-    ui->label_welcome_2->setText(nickname + " welcome!");
+void MainWindow::onSent(const QString& room)
+{
+    QByteArray arr(room.toUtf8());
+    socket.write(arr);
+    socket.flush();
 }
 
 
 void MainWindow::on_pushButton_makeroom_clicked()
 {
     /*다이어로그 실행해서 방 이름 입력 받음*/
-    Dialog dia;
-    dia.exec();
+    dialog = new Dialog(this);
+    connect(dialog, &Dialog::notifySent, this, &MainWindow::onSent);
+    dialog->show();
 }
 
 void MainWindow::on_pushButton_signup_clicked()
@@ -127,6 +141,8 @@ void MainWindow::on_pushButton_logout_clicked()
     /*page의 id, password 초기화*/
     ui->lineEdit_id->clear();
     ui->lineEdit_password->clear();
+
+    socket.close();
 }
 
 void MainWindow::on_pushButton_logout_2_clicked()
@@ -295,4 +311,5 @@ void MainWindow::on_pushButton_check_2_clicked()
         }
     }
 }
+
 

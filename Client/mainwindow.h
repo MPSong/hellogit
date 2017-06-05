@@ -5,6 +5,8 @@
 #include <QtSql>
 #include <QDebug>
 #include <QFileInfo>
+#include <QTcpSocket>
+#include "dialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,6 +21,8 @@ public:
     ~MainWindow();
 
 private slots:
+    void onSent(const QString& room);
+
     void on_pushButton_signin_clicked();
 
     void on_pushButton_makeroom_clicked();
@@ -37,9 +41,12 @@ private slots:
 
     void on_pushButton_check_2_clicked();
 
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase mydb;
+    QTcpSocket socket;
+    Dialog *dialog;
 };
 
 #endif // MAINWINDOW_H
