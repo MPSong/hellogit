@@ -4,10 +4,10 @@ ChatClient::ChatClient(){
 
 }
 
-ChatClient::ChatClient(QTcpSocket* newClient){
-    this->client=newClient;
-
+void ChatClient::setClient(QTcpSocket* newClient){
+    client=newClient;
 }
+
 
 void ChatClient::enterRoom(int roomIndex){
 

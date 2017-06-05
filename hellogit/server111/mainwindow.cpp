@@ -36,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete roomManager;
 }
 
 void MainWindow::startServer() //서버를 스타트하는 함수
@@ -65,11 +64,12 @@ void MainWindow::addConnection()
     QTcpSocket *s;
     s = server.nextPendingConnection();
 
-    ChatClient tempClient(s);
-    clientList.append(&tempClient);
-    roomManager->addClient(0, &tempClient);  //waiting room is index 0
+    ChatClient *tempClient;
+    tempClient->setClient(s);
+    clientList.append(tempClient);
+    roomManager->addClient(0, tempClient);  //waiting room is index 0
 
-    //list.append(s); //list에 추가
+     //list.append(s); //list에 추가
 
     /*메시지를 보낼 때, disconnect할 시 규칙*/
     connect(s, SIGNAL(disconnected()),this,SLOT(removeConnection()));
@@ -125,8 +125,19 @@ void MainWindow::removeConnection()
          sock->flush();
      }*/
 
+     if(arr.contains("$%*2")){
+         QList<QByteArray> tempArr=arr.split('/');
+         QByteArray temp(tempArr.at(2));
+         for(int i=0; i<clientList.size(); i++){
+             QTcpSocket* sock=clientList.at(i)->getTCP();
+             sock->write(temp);
+             sock->flush();
+         }
+     }
+
+
      /*로깅 모듈에 message가 날렸음을 알려주는 거 구현 필요*/
      QString str(arr);
-     ui->textEdit->append("send message\nwait for client");
+     ui->textEdit->append(str + " send message\nwait for client");
      log->writeFile(s->localAddress().toString()+" sends the message");
 }

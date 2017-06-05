@@ -11,7 +11,7 @@ class ChatClient
 
 public:
     ChatClient();
-    ChatClient(QTcpSocket* newClient);
+    void setClient(QTcpSocket* newClient);
     QTcpSocket* getTCP();
     void enterRoom(int roomIndex);
     int exitRoom();
