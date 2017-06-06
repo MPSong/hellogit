@@ -344,7 +344,7 @@
        <string>current chatting room</string>
       </property>
      </widget>
-     <widget class="QListWidget" name="listWidget">
+     <widget class="QListWidget" name="listWidget_room">
       <property name="geometry">
        <rect>
         <x>620</x>

@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /*데이터베이스 추가 및 경로와 연결*/
     mydb=QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/home/hyomin/ss/hellogit/user.db");
+    mydb.setDatabaseName("/home/hyomin/user.db");
 
     if(!mydb.open())
     {
@@ -95,7 +95,7 @@ void MainWindow::recvMsg()
     QTcpSocket *s = (QTcpSocket*)sender();
     QByteArray arr(s->readAll());
     QString str(arr);
-    ui->listWidget->addItem(str);
+    ui->listWidget_room->addItem(str);
 }
 
 void MainWindow::onSent(const QString& room)
@@ -150,6 +150,8 @@ void MainWindow::on_pushButton_logout_clicked()
     /*page의 id, password 초기화*/
     ui->lineEdit_id->clear();
     ui->lineEdit_password->clear();
+
+    ui->listWidget_room->clear();
 
     socket.close();
 }
