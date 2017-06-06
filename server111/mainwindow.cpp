@@ -38,6 +38,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
 void MainWindow::startServer() //서버를 스타트하는 함수
 {
     server.listen(QHostAddress::Any,2402); //포트 2402
