@@ -12,9 +12,8 @@
 
 
 Logging::Logging(){  //Creator
-    //loggingFile=new QFile(filename);
     QString ApplicationPath=QApplication::applicationDirPath();
-    loggingFile.setFileName(ApplicationPath + "_log.log");
+    loggingFile.setFileName(ApplicationPath + "/log.log");
 }
 
 Logging::~Logging(){
@@ -33,5 +32,5 @@ bool Logging::openFile(){
 
 void Logging::writeFile(QString wl){
     QTextStream out(&loggingFile);   //using textStream
-    out<<wl<<" is connected \n";
+    out<<wl<<"\n";
 }

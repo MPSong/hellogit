@@ -16,7 +16,7 @@ class ChatThread : public QThread
 
 public:
     //explicit ChatThread(qintptr ID, QObject *parent =0);
-    explicit ChatThread(qintptr ID, QTcpSocket *parent =0);
+    //explicit ChatThread(qintptr ID, QTcpSocket *parent =0);
     void run();
 
 signals:

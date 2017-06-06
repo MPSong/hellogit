@@ -26,12 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     mainwindow.cpp \
     chatthread.cpp \
-    logging.cpp
+    logging.cpp \
+    roommanager.cpp \
+    room.cpp \
+    chatclient.cpp
 
 HEADERS  += \
     mainwindow.h \
     chatthread.h \
-    logging.h
+    logging.h \
+    room.h \
+    roommanager.h \
+    chatclient.h
 
 FORMS    += \
     mainwindow.ui

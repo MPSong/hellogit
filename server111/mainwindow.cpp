@@ -10,6 +10,7 @@ logging module 추가
 #include "ui_mainwindow.h"
 #include "chatthread.h"
 #include "logging.h"
+#include <QHostAddress>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->textEdit->append(error);
     }
 
+    /*create roomManager*/
+    roomManager=new RoomManager();
+
 }
 
 MainWindow::~MainWindow()
@@ -39,14 +43,15 @@ void MainWindow::startServer() //서버를 스타트하는 함수
     server.listen(QHostAddress::Any,2402); //포트 2402
     connect(&server,SIGNAL(newConnection()),this,SLOT(addConnection()));
     ui->textEdit->append(QString("wait for client"));
-    log->writeFile(QString("server start"));
+    //server start logging
+    log->writeFile(QString("server start!"));
 }
 
 /*thread를 위한 함수, 일단 보*/
 void incomingConnection(qintptr socketDescriptor){
-    //QString usr;
+   // QString usr;
     //usr.sprintf("%s Connecting...", socketDescriptor);
-   // ChatThread *thread =new ChatThread(socketDescriptor, server);
+    //ChatThread *thread =new ChatThread(socketDescriptor, &server);
 
     //connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
@@ -59,36 +64,51 @@ void MainWindow::addConnection()
     QTcpSocket *s;
     s = server.nextPendingConnection();
 
-    list.append(s); //list에 추가
+    ChatClient tempClient;
+    tempClient.setClient(s);
+    clientList.append(tempClient);
+    //   roomManager->addClient(0, tempClient);  //waiting room is index 0
+
+     //list.append(s); //list에 추가
 
     /*메시지를 보낼 때, disconnect할 시 규칙*/
     connect(s, SIGNAL(disconnected()),this,SLOT(removeConnection()));
     connect(s, SIGNAL(readyRead()),this,SLOT(recvMsg()));
 
-    /*여기서 부터 수정할 코드(로깅 모듈을 이용해서 파일에 로그)*/
+    /*로깅 모듈을 이용해서 파일에 로그*/
     QString usr;
-    usr.sprintf("%dth usr is added", list.size());
+//    usr.sprintf("%dth usr is added", list.size());
+    usr.sprintf("%dth usr is added", clientList.size());
     ui->textEdit->append(usr);
-    //log->writeFile("test is added");
+    log->writeFile(s->localAddress().toString()+" is connected");//write on log file
 
     /*client에게 보내는 메시지*/
-    QByteArray arr("***welcome to linux chatting world!***\n");
-    QTcpSocket* sock = list[list.size()-1];
+    /*
+    QByteArray arr("***welcome to chatting world!***\n");
+    QTcpSocket* sock = clientList[clientList.size()-1]->getTCP();
     sock->write(arr);  //write
     sock->flush();
+    */
 }
 
 void MainWindow::removeConnection()
 {
     /*list에서 제거*/
     QTcpSocket* s = (QTcpSocket*)sender();
-    list.removeAll(s);
+    //list.removeAll(s);
+    for(int i=0; i<clientList.size(); i++){
+        if(clientList[i].getTCP()==s){
+            clientList.removeAt(i);
+            break;
+        }
+    }
     s->deleteLater();
 
     /*여기서 로깅모듈에 unconnect 되었음을 알려준다.*/
     QString usr;
-    usr.sprintf("One usr leaves. Current number of usrs = %d\nwait for client", list.size());
+    usr.sprintf("One usr leaves. Current number of usrs = %d\nwait for client", clientList.size());
     ui->textEdit->append(usr);
+    log->writeFile(s->localAddress().toString()+" is unconnected"); //write on log file
 
 }
 
@@ -100,13 +120,26 @@ void MainWindow::removeConnection()
 
      /* Room module이 완성되면 Room에 따라 뿌려주는 형식으로 변경해야함
       * 현재 연결되어 있는(list에 있는 모든 소켓에 메시지 전달)*/
+     /*
      foreach(QTcpSocket* sock, list)
      {
          sock->write(arr);
          sock->flush();
+     }*/
+
+     if(arr.contains("$%*2")){
+         QList<QByteArray> tempArr=arr.split('/');
+         QByteArray temp(tempArr.at(1));
+         for(int i=0; i<clientList.size(); i++){
+             QTcpSocket* sock=clientList[i].getTCP();
+             sock->write(temp);
+             sock->flush();
+         }
      }
+
 
      /*로깅 모듈에 message가 날렸음을 알려주는 거 구현 필요*/
      QString str(arr);
-     ui->textEdit->append("send message\nwait for client");
+     ui->textEdit->append(str + " send message\nwait for client");
+     log->writeFile(s->localAddress().toString()+" sends the message");
 }

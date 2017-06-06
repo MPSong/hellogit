@@ -12,7 +12,9 @@ logmodule 추가
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include "roommanager.h"
 #include "logging.h"
+#include "chatclient.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,9 +38,11 @@ public slots:
     void recvMsg();
 private:
     Logging *log;  //logging module
-    QList<QTcpSocket*> list;
+    //QList<QTcpSocket*> list;
+    QList<ChatClient> clientList;
     QTcpServer server;
     Ui::MainWindow *ui;
+    RoomManager *roomManager;
 };
 
 #endif // MAINWINDOW_H

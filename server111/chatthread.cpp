@@ -12,12 +12,12 @@ ChatThread::ChatThread(qintptr ID, QObject *parent) :
     QThread(parent)
 {
     this->socketDescriptor = ID;
-}*/
+}
 ChatThread::ChatThread(qintptr ID, QTcpSocket *parent) :
     QThread(parent)
 {
     this->socketDescriptor = ID;
-}
+}*/
 
 /*실제로 스레드가 작동되는 run 함수*/
 void ChatThread::run()
