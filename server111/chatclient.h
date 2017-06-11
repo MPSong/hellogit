@@ -7,13 +7,16 @@ class ChatClient
 {
     int roomIndex;
     QTcpSocket* client;
-    int index;
+    QString nickName;
 
 public:
     ChatClient();
-    void setClient(QTcpSocket* newClient);
+    void setClient(QTcpSocket* newClient, QString nickname);
+
     QTcpSocket* getTCP();
-    void enterRoom(int roomIndex);
+    void enterRoom(int Index);
+    QString getNickName();
+    int getRoomIndex();
     int exitRoom();
 
 };

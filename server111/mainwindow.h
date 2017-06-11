@@ -12,6 +12,7 @@ logmodule 추가
 #include <QMainWindow>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QtSql>
 #include "roommanager.h"
 #include "logging.h"
 #include "chatclient.h"
@@ -43,6 +44,7 @@ private:
     QTcpServer server;
     Ui::MainWindow *ui;
     RoomManager *roomManager;
+    QSqlDatabase mydb;
 };
 
 #endif // MAINWINDOW_H

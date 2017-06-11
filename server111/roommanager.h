@@ -7,14 +7,16 @@
 
 class RoomManager{
 private:
-    QList<Room*> room;
+    QList<Room*> rooms;
     int roomNum;
 
 public:
     RoomManager();
     void addClient(int number, ChatClient* client);
     int removeClient();
-    bool createRoom();
+    void createRoom(QString str);
+    void moveClient(int number, ChatClient* client);
+    int getRoomNum(QString str);
     bool removeRoom(int roomNum);
 };
 
