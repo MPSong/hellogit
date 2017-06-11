@@ -67,6 +67,12 @@ void MainWindow::on_pushButton_logout_clicked()
     QString id;
     id = ui->lineEdit_id->text();
 
+    /*send nickname to server*/
+    QByteArray arr(nickName.toUtf8());
+    socket.write("$%*-3/" + arr);
+    socket.flush();
+
+
     /*page 로 이동*/
     ui->stackedWidget->setCurrentWidget(ui->page);
 
@@ -75,8 +81,7 @@ void MainWindow::on_pushButton_logout_clicked()
     ui->lineEdit_password->clear();
 
     ui->listWidget_room->clear();
-
-    socket.close();
+    ui->listWidget_users->clear();
 }
 
 void MainWindow::on_pushButton_logout_2_clicked()
@@ -84,11 +89,16 @@ void MainWindow::on_pushButton_logout_2_clicked()
     QString id;
     id = ui->lineEdit_id->text();
 
+    QByteArray arr(nickName.toUtf8());
+     socket.write("$%*-3/" + arr);
+    socket.flush();
+
     ui->stackedWidget->setCurrentWidget(ui->page);
     ui->lineEdit_id->clear();
     ui->lineEdit_password->clear();
 
-    socket.close();
+    ui->listWidget_room->clear();
+    ui->listWidget_users->clear();
 }
 
 void MainWindow::on_pushButton_confirm_clicked()
@@ -118,16 +128,6 @@ void MainWindow::on_pushButton_confirm_clicked()
     QByteArray arr("$%*0/"+id.toUtf8()+"/" + password.toUtf8() + "/" + name.toUtf8() + "/" + nickname.toUtf8());
     socket.write(arr);
     socket.flush();
-
-    /*page로 이동*/
-    ui->stackedWidget->setCurrentWidget(ui->page);
-
-    /*page_2의 모든 lineEdit 초기화*/
-    ui->lineEdit_id_2->clear();
-    ui->lineEdit_password_2->clear();
-    ui->lineEdit_passconfirm->clear();
-    ui->lineEdit_name->clear();
-    ui->lineEdit_nickname->clear();
 
 }
 
@@ -167,8 +167,69 @@ void MainWindow::recvMsg()
     ui->listWidget_room->addItem(str);
     */
 
-    //room name
-    if(arr.contains("$%*3") ){
+    //sign in
+    if(arr.contains("$%*1")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        if(temp == "clear"){
+             ui->stackedWidget->setCurrentWidget(ui->page_3);
+             QByteArray temp2 = tempArr.at(2);
+             str = temp2;
+             nickName = temp2;
+             ui->label_welcome->setText(nickName + " welcome!");
+             ui->label_welcome_2->setText(nickName + " welcome!");
+        }
+
+        else if(temp == "fail"){
+            QMessageBox::warning(this,tr("Error"),tr("Please check your id and password again"));
+        }
+    }
+
+    //sign up
+    else if(arr.contains("$%*0")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        if(temp == "clear"){
+            QMessageBox::information(this,tr("Save"),tr("Saved"));
+
+            ui->stackedWidget->setCurrentWidget(ui->page);
+
+            ui->lineEdit_id_2->clear();
+            ui->lineEdit_password_2->clear();
+            ui->lineEdit_passconfirm->clear();
+            ui->lineEdit_name->clear();
+            ui->lineEdit_nickname->clear();
+        }
+        else if(temp == "idDuplicate"){
+            QMessageBox::warning(this,tr("Error"),tr("Your id is duplicated"));
+        }
+        else if(temp == "nickNameDuplicate"){
+            QMessageBox::warning(this,tr("Error"),tr("Your nickname is duplicated"));
+        }
+    }
+
+    else if(arr.contains("$%*-1")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        if(temp == "clear")
+            QMessageBox::information(this,tr("Ok"),tr("You can use this id"));
+
+        else if(temp == "fail")
+            QMessageBox::warning(this,tr("Error"),tr("Your id is duplicated"));
+    }
+
+    else if(arr.contains("$%*-2")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        if(temp == "clear")
+            QMessageBox::information(this,tr("Ok"),tr("You can use this nickname"));
+
+        else if(temp == "fail")
+            QMessageBox::warning(this,tr("Error"),tr("Your nickname is duplicated"));
+    }
+
+    //new room
+    else if(arr.contains("$%*2") ){
         tempArr=arr.split('/');
         temp = tempArr.at(1);
         str = temp;
@@ -241,3 +302,8 @@ void MainWindow::on_pushButton_invite_clicked()
 }
 
 
+
+void MainWindow::on_pushButton_send_clicked()
+{
+
+}

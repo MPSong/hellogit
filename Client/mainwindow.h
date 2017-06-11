@@ -49,11 +49,14 @@ private slots:
 
     void on_pushButton_check_nick_clicked();
 
+    void on_pushButton_send_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase mydb;
     QTcpSocket socket;
     Dialog *dialog;
+    QString nickName;
 };
 
 #endif // MAINWINDOW_H
