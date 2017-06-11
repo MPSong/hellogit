@@ -24,10 +24,10 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="lineEdit_id">
       <property name="geometry">
        <rect>
         <x>402</x>
@@ -37,7 +37,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="lineEdit_password">
       <property name="geometry">
        <rect>
         <x>402</x>
@@ -46,11 +46,14 @@
         <height>25</height>
        </rect>
       </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
      </widget>
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>306</x>
+        <x>310</x>
         <y>140</y>
         <width>31</width>
         <height>20</height>
@@ -63,7 +66,7 @@
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>286</x>
+        <x>290</x>
         <y>220</y>
         <width>81</width>
         <height>20</height>
@@ -73,10 +76,10 @@
        <string>password</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButton_signin">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>320</x>
         <y>330</y>
         <width>89</width>
         <height>25</height>
@@ -86,10 +89,10 @@
        <string>Sign-in</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButton_signup">
       <property name="geometry">
        <rect>
-        <x>460</x>
+        <x>450</x>
         <y>330</y>
         <width>89</width>
         <height>25</height>
@@ -101,7 +104,7 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_2">
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="lineEdit_id_2">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -111,7 +114,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="lineEdit_password_2">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -120,8 +123,11 @@
         <height>25</height>
        </rect>
       </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_5">
+     <widget class="QLineEdit" name="lineEdit_passconfirm">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -130,8 +136,11 @@
         <height>25</height>
        </rect>
       </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_6">
+     <widget class="QLineEdit" name="lineEdit_name">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -141,7 +150,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_7">
+     <widget class="QLineEdit" name="lineEdit_nickname">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -151,7 +160,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="pushButton_confirm">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -164,10 +173,10 @@
        <string>Confirm</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="pushButton_cancel">
       <property name="geometry">
        <rect>
-        <x>460</x>
+        <x>450</x>
         <y>400</y>
         <width>89</width>
         <height>25</height>
@@ -177,30 +186,30 @@
        <string>Cancel</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_5">
+     <widget class="QPushButton" name="pushButton_check_id">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>70</y>
         <width>151</width>
         <height>25</height>
        </rect>
       </property>
       <property name="text">
-       <string>confirm reputation</string>
+       <string>duplication check</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_6">
+     <widget class="QPushButton" name="pushButton_check_nick">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>310</y>
         <width>151</width>
         <height>25</height>
        </rect>
       </property>
       <property name="text">
-       <string>confirm reputation</string>
+       <string>duplication check</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_3">
@@ -239,7 +248,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>password confirm</string>
+       <string>confirm password</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_6">
@@ -271,7 +280,7 @@
      <widget class="QLabel" name="label_13">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>470</x>
         <y>130</y>
         <width>321</width>
         <height>17</height>
@@ -283,7 +292,7 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_3">
-     <widget class="QPushButton" name="pushButton_7">
+     <widget class="QPushButton" name="pushButton_logout">
       <property name="geometry">
        <rect>
         <x>768</x>
@@ -296,7 +305,7 @@
        <string>logout</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_8">
+     <widget class="QPushButton" name="pushButton_entrance">
       <property name="geometry">
        <rect>
         <x>630</x>
@@ -309,7 +318,7 @@
        <string>entrance</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_9">
+     <widget class="QPushButton" name="pushButton_makeroom">
       <property name="geometry">
        <rect>
         <x>730</x>
@@ -335,7 +344,7 @@
        <string>current chatting room</string>
       </property>
      </widget>
-     <widget class="QListWidget" name="listWidget">
+     <widget class="QListWidget" name="listWidget_room">
       <property name="geometry">
        <rect>
         <x>620</x>
@@ -345,7 +354,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_9">
+     <widget class="QLabel" name="label_welcome">
       <property name="geometry">
        <rect>
         <x>620</x>
@@ -355,12 +364,12 @@
        </rect>
       </property>
       <property name="text">
-       <string>hyomin welcome!</string>
+       <string/>
       </property>
      </widget>
     </widget>
     <widget class="QWidget" name="page_4">
-     <widget class="QListWidget" name="listWidget_2">
+     <widget class="QListWidget" name="listWidget_users">
       <property name="geometry">
        <rect>
         <x>620</x>
@@ -370,7 +379,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_10">
+     <widget class="QPushButton" name="pushButton_invite">
       <property name="geometry">
        <rect>
         <x>680</x>
@@ -393,10 +402,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>connected usrs</string>
+       <string>connected users</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="label_welcome_2">
       <property name="geometry">
        <rect>
         <x>620</x>
@@ -406,10 +415,10 @@
        </rect>
       </property>
       <property name="text">
-       <string>hyomin welcome!</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_11">
+     <widget class="QPushButton" name="pushButton_logout_2">
       <property name="geometry">
        <rect>
         <x>770</x>
@@ -468,7 +477,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_14">
+     <widget class="QPushButton" name="pushButton_exit">
       <property name="geometry">
        <rect>
         <x>510</x>

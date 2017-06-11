@@ -18,17 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(&socket,SIGNAL(readyRead()),this,SLOT(recvMsg()));
 
-    /*데이터베이스 추가 및 경로와 연결*/
-    mydb=QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/home/hyomin/user.db");
-
-    if(!mydb.open())
-    {
-        QMessageBox box;
-        box.setText("Failed to open the database");
-        box.setStandardButtons(QMessageBox::Ok);
-    }
-
+    QString host_str("127.0.1.0");
+    QHostAddress host(host_str);
+    int port =2402;
+    socket.connectToHost(host,port);
 }
 
 MainWindow::~MainWindow()
@@ -44,50 +37,9 @@ void MainWindow::on_pushButton_signin_clicked()
     id = ui->lineEdit_id->text();
     password = ui->lineEdit_password->text();
 
-    /*데이터베이스 오픈 가능한지 확인*/
-    if(!mydb.isOpen()){
-        qDebug()<<"Failed to open the database";
-        return;
-    }
-
-    /*입력받은 id와 password가 데이터베이스에 존재 하는지 확인하고 존재할 경우 page_3로 이동*/
-    QSqlQuery qry;
-
-    if(qry.exec("select * from USER where UID='"+ id +"' and Password='" + password +"'")){
-        int count=0;
-        //검색된 튜플 개수 카운트
-        while(qry.next())
-        {
-            count++;
-        }
-        //존재할 경우
-        if(count==1)
-        {
-            //데이터베이스에서 해당 id의 State값을 'connected'로 update
-            QString state = "connected";
-            qry.exec("update USER set State = '" + state + "' where UID = '" + id + "'");
-
-            QString host_str("127.0.1.0");
-            QHostAddress host(host_str);
-            int port =2402;
-            socket.connectToHost(host,port);
-
-            /*입력받은 id의 닉네임 검색후 page_3, page_4에 환영 문구 씀*/
-            qry.exec("select Nickname from USER where UID='"+ id +"'");
-            qry.next();
-            QString nickname = qry.value(0).toString();
-            ui->label_welcome->setText(nickname + " welcome!");
-            ui->label_welcome_2->setText(nickname + " welcome!");
-
-            //page_3로 이동
-            ui->stackedWidget->setCurrentWidget(ui->page_3);
-        }
-        //존재하지 않을 경우
-        if(count<1)
-        {
-           QMessageBox::warning(this,tr("Error"),tr("Please check your id and password again"));
-        }
-    }
+    QByteArray arr("$%*1/"+id.toUtf8()+"/" + password);
+    socket.write(arr);
+    socket.flush();
 }
 
 void MainWindow::on_pushButton_signup_clicked()
@@ -115,11 +67,6 @@ void MainWindow::on_pushButton_logout_clicked()
     QString id;
     id = ui->lineEdit_id->text();
 
-    /*데이터베이스에서 해당 id의 State값을 'unConnected'로 update*/
-    QString state = "notConnected";
-    QSqlQuery qry;
-    qry.exec("update USER set State = '" + state + "' where UID = '" + id + "'");
-
     /*page 로 이동*/
     ui->stackedWidget->setCurrentWidget(ui->page);
 
@@ -137,10 +84,6 @@ void MainWindow::on_pushButton_logout_2_clicked()
     QString id;
     id = ui->lineEdit_id->text();
 
-    QString state = "notConnected";
-    QSqlQuery qry;
-    qry.exec("update USER set State = '" + state + "' where UID = '" + id + "'");
-
     ui->stackedWidget->setCurrentWidget(ui->page);
     ui->lineEdit_id->clear();
     ui->lineEdit_password->clear();
@@ -151,15 +94,12 @@ void MainWindow::on_pushButton_logout_2_clicked()
 void MainWindow::on_pushButton_confirm_clicked()
 {
     /*사용자가 입력한 id, password, password확인, name, nickname 저장*/
-    QString id, password, name, nickname, state, passconfirm;
+    QString id, password, name, nickname, passconfirm;
     id = ui->lineEdit_id_2->text();
     password = ui->lineEdit_password_2->text();
     passconfirm = ui->lineEdit_passconfirm->text();
     name = ui->lineEdit_name->text();
     nickname = ui->lineEdit_nickname->text();
-
-    /*state를 notConnected로 초기화*/
-    state = "notConnected";
 
 
     /*사용자가 하나라도 입력하지 않은 것이 있을 경우*/
@@ -174,56 +114,11 @@ void MainWindow::on_pushButton_confirm_clicked()
         return;
     }
 
-    /*데이터베이스가 오픈 불가능할 경우*/
-    if(!mydb.isOpen()){
-        qDebug()<<"Failed to open the database";
-        return;
-    }
+    /*send to server*/
+    QByteArray arr("$%*0/"+id.toUtf8()+"/" + password.toUtf8() + "/" + name.toUtf8() + "/" + nickname.toUtf8());
+    socket.write(arr);
+    socket.flush();
 
-
-    /*데이터베이스에 동일한 id가 있는 경우*/
-    QSqlQuery qry;
-
-    if(qry.exec("select * from USER where UID='"+ id +"'")){
-        int count=0;
-        while(qry.next())
-        {
-            count++;
-        }
-        if(count==1)
-        {
-            QMessageBox::warning(this,tr("Error"),tr("Your id is duplicated"));
-            return;
-        }
-    }
-
-
-    /*데이터베이스에 동일한 닉네임이 있는 경우*/
-    if(qry.exec("select * from USER where Nickname='"+ nickname +"'")){
-        int count=0;
-        while(qry.next())
-        {
-            count++;
-        }
-        if(count==1)
-        {
-            QMessageBox::warning(this,tr("Error"),tr("Your nickname is duplicated"));
-            return;
-        }
-    }
-
-
-    /*입력받은 id, password, name, nickname 과 state 삽입*/
-    qry.prepare("insert into USER (UID,Password,Name,Nickname,State) values ('" + id + "','" + password + "', '" + name + "', '" + nickname + "', '" + state + "')");
-
-    if(qry.exec()){
-        QMessageBox::information(this,tr("Save"),tr("Saved"));
-    }
-    else{
-        QMessageBox::critical(this,tr("Error"),qry.lastError().text());
-    }
-
-ui->listWidget_room->addItem(str);
     /*page로 이동*/
     ui->stackedWidget->setCurrentWidget(ui->page);
 
@@ -236,69 +131,27 @@ ui->listWidget_room->addItem(str);
 
 }
 
-void MainWindow::on_pushButton_check_clicked()
+void MainWindow::on_pushButton_check_id_clicked()
 {
     /*사용자가 입력한 id 저장*/
      QString id;
      id = ui->lineEdit_id_2->text();
 
-    if(!mydb.isOpen()){
-        qDebug()<<"Failed to open the database";
-        return;
-    }
-
-    /*데이터베이스에 해당 id가 있는지 확인*/
-     QSqlQuery qry;
-
-     if(qry.exec("select * from USER where UID='"+ id +"'")){
-         int count=0;
-         while(qry.next())
-         {
-             count++;
-         }
-         if(count==1)
-         {
-             QMessageBox::warning(this,tr("Error"),tr("you can not use this id"));
-         }
-
-         if(count<1)
-         {
-            QMessageBox::information(this,tr("Ok"),tr("you can use this id"));
-         }
-     }
+     QByteArray arr("$%*-1/"+id.toUtf8());
+     socket.write(arr);
+     socket.flush();
 }
 
 
-void MainWindow::on_pushButton_check_2_clicked()
+void MainWindow::on_pushButton_check_nick_clicked()
 {
     /*사용자가 입력한 닉네임 저장*/
     QString nickname;
     nickname = ui->lineEdit_nickname->text();
 
-   if(!mydb.isOpen()){
-       qDebug()<<"Failed to open the database";
-       return;
-   }
-
-    /*데이터베이스에 해당 nickname이 있는지 확인*/
-    QSqlQuery qry;
-
-    if(qry.exec("select * from USER where Nickname='"+ nickname +"'")){
-        int count=0;
-        while(qry.next())
-        {
-            count++;
-        }
-        if(count==1)
-        {
-            QMessageBox::warning(this,tr("Error"),tr("you can not use this nickname"));
-        }
-
-        if(count<1)
-        {
-           QMessageBox::information(this,tr("Ok"),tr("you can use this nickname"));
-        }
-    }
+    QByteArray arr("$%*-2/"+id.toUtf8());
+    socket.write(arr);
+    socket.flush();
 }
 
 void MainWindow::recvMsg()
