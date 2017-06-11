@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLineEdit" name="lineEdit_id">
@@ -186,7 +186,7 @@
        <string>Cancel</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_check">
+     <widget class="QPushButton" name="pushButton_check_id">
       <property name="geometry">
        <rect>
         <x>470</x>
@@ -199,7 +199,7 @@
        <string>duplication check</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_check_2">
+     <widget class="QPushButton" name="pushButton_check_nick">
       <property name="geometry">
        <rect>
         <x>470</x>

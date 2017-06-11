@@ -239,3 +239,5 @@ void MainWindow::on_pushButton_invite_clicked()
     else
         QMessageBox::warning(this,tr("Error"),tr("please click a user"));
 }
+
+
