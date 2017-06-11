@@ -37,7 +37,7 @@ void MainWindow::on_pushButton_signin_clicked()
     id = ui->lineEdit_id->text();
     password = ui->lineEdit_password->text();
 
-    QByteArray arr("$%*1/"+id.toUtf8()+"/" + password);
+    QByteArray arr("$%*1/"+id.toUtf8()+"/" + password.toUtf8());
     socket.write(arr);
     socket.flush();
 }
@@ -149,7 +149,7 @@ void MainWindow::on_pushButton_check_nick_clicked()
     QString nickname;
     nickname = ui->lineEdit_nickname->text();
 
-    QByteArray arr("$%*-2/"+id.toUtf8());
+    QByteArray arr("$%*-2/"+ nickname.toUtf8());
     socket.write(arr);
     socket.flush();
 }
