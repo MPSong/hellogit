@@ -42,6 +42,10 @@ private slots:
     void on_pushButton_check_2_clicked();
 
      void recvMsg();
+     void on_pushButton_entrance_clicked();
+
+     void on_pushButton_exit_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase mydb;

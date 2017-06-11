@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLineEdit" name="lineEdit_id">
@@ -305,7 +305,7 @@
        <string>logout</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_8">
+     <widget class="QPushButton" name="pushButton_entrance">
       <property name="geometry">
        <rect>
         <x>630</x>
@@ -477,7 +477,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_14">
+     <widget class="QPushButton" name="pushButton_exit">
       <property name="geometry">
        <rect>
         <x>510</x>

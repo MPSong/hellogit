@@ -1,9 +1,9 @@
-/*---------------------------
-최종 작성 일시: 2017. 06. 06
-이전 작성자: 김효민
+/*-------------------------
+최종 작성 일시: 2017. 05. 25
+이전 작성자:
 최종 작성자: 김효민
-메세지 보내고 받기
------------------------------*/
+로그인, 로그아웃, 회원가입 구현
+--------------------------*/
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -90,30 +90,6 @@ void MainWindow::on_pushButton_signin_clicked()
     }
 }
 
-void MainWindow::recvMsg()
-{
-    QTcpSocket *s = (QTcpSocket*)sender();
-    QByteArray arr(s->readAll());
-    QString str(arr);
-    ui->listWidget_room->addItem(str);
-}
-
-void MainWindow::onSent(const QString& room)
-{
-    QByteArray arr("$%*2/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
-    socket.write(arr);
-    socket.flush();
-}
-
-
-void MainWindow::on_pushButton_makeroom_clicked()
-{
-    /*다이어로그 실행해서 방 이름 입력 받음*/
-    dialog = new Dialog(this);
-    connect(dialog, &Dialog::notifySent, this, &MainWindow::onSent);
-    dialog->show();
-}
-
 void MainWindow::on_pushButton_signup_clicked()
 {
     /*page_2로 이동*/
@@ -168,6 +144,8 @@ void MainWindow::on_pushButton_logout_2_clicked()
     ui->stackedWidget->setCurrentWidget(ui->page);
     ui->lineEdit_id->clear();
     ui->lineEdit_password->clear();
+
+    socket.close();
 }
 
 void MainWindow::on_pushButton_confirm_clicked()
@@ -323,4 +301,49 @@ void MainWindow::on_pushButton_check_2_clicked()
     }
 }
 
+void MainWindow::recvMsg()
+{
+    QTcpSocket *s = (QTcpSocket*)sender();
+    QByteArray arr(s->readAll());
+    QString str(arr);
+    ui->listWidget_room->addItem(str);
+}
 
+void MainWindow::onSent(const QString& room)
+{
+    QByteArray arr("$%*2/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
+    socket.write(arr);
+    socket.flush();
+}
+
+
+void MainWindow::on_pushButton_makeroom_clicked()
+{
+    /*다이어로그 실행해서 방 이름 입력 받음*/
+    dialog = new Dialog(this);
+    connect(dialog, &Dialog::notifySent, this, &MainWindow::onSent);
+    dialog->show();
+}
+
+void MainWindow::on_pushButton_entrance_clicked()
+{
+    if(ui->listWidget_room->currentItem())
+    {
+        QString room = ui->listWidget_room->currentItem()->text();
+
+        QByteArray arr("$%*3/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
+        socket.write(arr);
+        socket.flush();
+
+        ui->stackedWidget->setCurrentWidget(ui->page_4);
+    }
+
+    else
+        QMessageBox::warning(this,tr("Error"),tr("please click your room"));
+
+}
+
+void MainWindow::on_pushButton_exit_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(ui->page_3);
+}
