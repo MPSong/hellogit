@@ -46,6 +46,8 @@ private slots:
 
      void on_pushButton_exit_clicked();
 
+     void on_pushButton_invite_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase mydb;

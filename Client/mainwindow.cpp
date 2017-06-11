@@ -223,7 +223,7 @@ void MainWindow::on_pushButton_confirm_clicked()
         QMessageBox::critical(this,tr("Error"),qry.lastError().text());
     }
 
-
+ui->listWidget_room->addItem(str);
     /*page로 이동*/
     ui->stackedWidget->setCurrentWidget(ui->page);
 
@@ -305,8 +305,31 @@ void MainWindow::recvMsg()
 {
     QTcpSocket *s = (QTcpSocket*)sender();
     QByteArray arr(s->readAll());
-    QString str(arr);
+
+    QList<QByteArray> tempArr;
+    QByteArray temp;
+    QString str;
+/*
+    str = arr;
     ui->listWidget_room->addItem(str);
+    */
+
+    //room name
+    if(arr.contains("$%*3") ){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        str = temp;
+        ui->listWidget_room->addItem(str);
+    }
+
+    //users
+    else if(arr.contains("$%*4")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        str = temp;
+        ui->listWidget_users->addItem(str);
+    }
+
 }
 
 void MainWindow::onSent(const QString& room)
@@ -346,4 +369,20 @@ void MainWindow::on_pushButton_entrance_clicked()
 void MainWindow::on_pushButton_exit_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->page_3);
+}
+
+
+void MainWindow::on_pushButton_invite_clicked()
+{
+    if(ui->listWidget_users->currentItem())
+    {
+        QString user = ui->listWidget_users->currentItem()->text();
+
+        QByteArray arr("$%*4/"+user.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
+        socket.write(arr);
+        socket.flush();
+    }
+
+    else
+        QMessageBox::warning(this,tr("Error"),tr("please click a user"));
 }

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLineEdit" name="lineEdit_id">
@@ -369,7 +369,7 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_4">
-     <widget class="QListWidget" name="listWidget_2">
+     <widget class="QListWidget" name="listWidget_users">
       <property name="geometry">
        <rect>
         <x>620</x>
@@ -379,7 +379,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_10">
+     <widget class="QPushButton" name="pushButton_invite">
       <property name="geometry">
        <rect>
         <x>680</x>
@@ -402,7 +402,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>connected usrs</string>
+       <string>connected users</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_welcome_2">
