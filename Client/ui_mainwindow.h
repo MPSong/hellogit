@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -66,10 +66,10 @@ public:
     QLabel *label_10;
     QLabel *label_welcome_2;
     QPushButton *pushButton_logout_2;
-    QTextEdit *textEdit;
+    QTextEdit *textEdit_message;
     QPushButton *pushButton_send;
     QPushButton *pushButton_attachment;
-    QTextEdit *textEdit_2;
+    QTextEdit *textEdit_chat;
     QPushButton *pushButton_exit;
     QPushButton *pushButton_15;
     QLabel *label_roomname;
@@ -194,18 +194,18 @@ public:
         pushButton_logout_2 = new QPushButton(page_4);
         pushButton_logout_2->setObjectName(QStringLiteral("pushButton_logout_2"));
         pushButton_logout_2->setGeometry(QRect(770, 40, 61, 25));
-        textEdit = new QTextEdit(page_4);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
-        textEdit->setGeometry(QRect(10, 409, 481, 71));
+        textEdit_message = new QTextEdit(page_4);
+        textEdit_message->setObjectName(QStringLiteral("textEdit_message"));
+        textEdit_message->setGeometry(QRect(10, 409, 481, 71));
         pushButton_send = new QPushButton(page_4);
         pushButton_send->setObjectName(QStringLiteral("pushButton_send"));
         pushButton_send->setGeometry(QRect(510, 410, 89, 25));
         pushButton_attachment = new QPushButton(page_4);
         pushButton_attachment->setObjectName(QStringLiteral("pushButton_attachment"));
         pushButton_attachment->setGeometry(QRect(510, 450, 89, 25));
-        textEdit_2 = new QTextEdit(page_4);
-        textEdit_2->setObjectName(QStringLiteral("textEdit_2"));
-        textEdit_2->setGeometry(QRect(13, 80, 591, 311));
+        textEdit_chat = new QTextEdit(page_4);
+        textEdit_chat->setObjectName(QStringLiteral("textEdit_chat"));
+        textEdit_chat->setGeometry(QRect(13, 80, 591, 311));
         pushButton_exit = new QPushButton(page_4);
         pushButton_exit->setObjectName(QStringLiteral("pushButton_exit"));
         pushButton_exit->setGeometry(QRect(510, 40, 89, 25));
@@ -228,34 +228,34 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        label->setText(QApplication::translate("MainWindow", "ID", 0));
-        label_2->setText(QApplication::translate("MainWindow", "password", 0));
-        pushButton_signin->setText(QApplication::translate("MainWindow", "Sign-in", 0));
-        pushButton_signup->setText(QApplication::translate("MainWindow", "Sign-up", 0));
-        pushButton_confirm->setText(QApplication::translate("MainWindow", "Confirm", 0));
-        pushButton_cancel->setText(QApplication::translate("MainWindow", "Cancel", 0));
-        pushButton_check_id->setText(QApplication::translate("MainWindow", "duplication check", 0));
-        pushButton_check_nick->setText(QApplication::translate("MainWindow", "duplication check", 0));
-        label_3->setText(QApplication::translate("MainWindow", "ID", 0));
-        label_4->setText(QApplication::translate("MainWindow", "password", 0));
-        label_5->setText(QApplication::translate("MainWindow", "confirm password", 0));
-        label_6->setText(QApplication::translate("MainWindow", "name", 0));
-        label_7->setText(QApplication::translate("MainWindow", "nickname", 0));
-        label_13->setText(QApplication::translate("MainWindow", "Password's length must be between 6 and 10 ", 0));
-        pushButton_logout->setText(QApplication::translate("MainWindow", "logout", 0));
-        pushButton_entrance->setText(QApplication::translate("MainWindow", "entrance", 0));
-        pushButton_makeroom->setText(QApplication::translate("MainWindow", "make room", 0));
-        label_8->setText(QApplication::translate("MainWindow", "current chatting room", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        label->setText(QApplication::translate("MainWindow", "ID", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", "password", Q_NULLPTR));
+        pushButton_signin->setText(QApplication::translate("MainWindow", "Sign-in", Q_NULLPTR));
+        pushButton_signup->setText(QApplication::translate("MainWindow", "Sign-up", Q_NULLPTR));
+        pushButton_confirm->setText(QApplication::translate("MainWindow", "Confirm", Q_NULLPTR));
+        pushButton_cancel->setText(QApplication::translate("MainWindow", "Cancel", Q_NULLPTR));
+        pushButton_check_id->setText(QApplication::translate("MainWindow", "duplication check", Q_NULLPTR));
+        pushButton_check_nick->setText(QApplication::translate("MainWindow", "duplication check", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MainWindow", "ID", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MainWindow", "password", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindow", "confirm password", Q_NULLPTR));
+        label_6->setText(QApplication::translate("MainWindow", "name", Q_NULLPTR));
+        label_7->setText(QApplication::translate("MainWindow", "nickname", Q_NULLPTR));
+        label_13->setText(QApplication::translate("MainWindow", "Password's length must be between 6 and 10 ", Q_NULLPTR));
+        pushButton_logout->setText(QApplication::translate("MainWindow", "logout", Q_NULLPTR));
+        pushButton_entrance->setText(QApplication::translate("MainWindow", "entrance", Q_NULLPTR));
+        pushButton_makeroom->setText(QApplication::translate("MainWindow", "make room", Q_NULLPTR));
+        label_8->setText(QApplication::translate("MainWindow", "current chatting room", Q_NULLPTR));
         label_welcome->setText(QString());
-        pushButton_invite->setText(QApplication::translate("MainWindow", "invite", 0));
-        label_10->setText(QApplication::translate("MainWindow", "connected users", 0));
+        pushButton_invite->setText(QApplication::translate("MainWindow", "invite", Q_NULLPTR));
+        label_10->setText(QApplication::translate("MainWindow", "connected users", Q_NULLPTR));
         label_welcome_2->setText(QString());
-        pushButton_logout_2->setText(QApplication::translate("MainWindow", "logout", 0));
-        pushButton_send->setText(QApplication::translate("MainWindow", "send", 0));
-        pushButton_attachment->setText(QApplication::translate("MainWindow", "attachment", 0));
-        pushButton_exit->setText(QApplication::translate("MainWindow", "exit", 0));
-        pushButton_15->setText(QApplication::translate("MainWindow", "received file", 0));
+        pushButton_logout_2->setText(QApplication::translate("MainWindow", "logout", Q_NULLPTR));
+        pushButton_send->setText(QApplication::translate("MainWindow", "send", Q_NULLPTR));
+        pushButton_attachment->setText(QApplication::translate("MainWindow", "attachment", Q_NULLPTR));
+        pushButton_exit->setText(QApplication::translate("MainWindow", "exit", Q_NULLPTR));
+        pushButton_15->setText(QApplication::translate("MainWindow", "received file", Q_NULLPTR));
         label_roomname->setText(QString());
     } // retranslateUi
 

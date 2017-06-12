@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'dialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -54,10 +54,10 @@ public:
 
     void retranslateUi(QDialog *Dialog)
     {
-        Dialog->setWindowTitle(QApplication::translate("Dialog", "Dialog", 0));
-        label->setText(QApplication::translate("Dialog", "name of the chatting room", 0));
-        pushButton_confirm->setText(QApplication::translate("Dialog", "Confirm", 0));
-        pushButton_cancel->setText(QApplication::translate("Dialog", "Cancel", 0));
+        Dialog->setWindowTitle(QApplication::translate("Dialog", "Dialog", Q_NULLPTR));
+        label->setText(QApplication::translate("Dialog", "name of the chatting room", Q_NULLPTR));
+        pushButton_confirm->setText(QApplication::translate("Dialog", "Confirm", Q_NULLPTR));
+        pushButton_cancel->setText(QApplication::translate("Dialog", "Cancel", Q_NULLPTR));
     } // retranslateUi
 
 };

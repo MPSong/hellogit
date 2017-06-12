@@ -244,6 +244,13 @@ void MainWindow::recvMsg()
         ui->listWidget_users->addItem(str);
     }
 
+    else if(arr.contains("$%*5")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        str = temp;
+        ui->textEdit_chat->append(str);
+    }
+
 }
 
 void MainWindow::onSent(const QString& room)
@@ -306,10 +313,12 @@ void MainWindow::on_pushButton_invite_clicked()
 
 void MainWindow::on_pushButton_send_clicked()
 {
-    QByteArray arr("<" + nickName "> " + ui->textEdit_message->copy());
-    QByteArray arr("$%*2/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
+    QString message = ui->textEdit_message->toPlainText();
+    QByteArray arr("$%*5/" + nickName.toUtf8() + ":  " + message.toUtf8());
     socket.write(arr);
     socket.flush();
+
+    ui->textEdit_message->clear();
 }
 
 

@@ -431,7 +431,7 @@
        <string>logout</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="textEdit">
+     <widget class="QTextEdit" name="textEdit_message">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -467,7 +467,7 @@
        <string>attachment</string>
       </property>
      </widget>
-     <widget class="QTextEdit" name="textEdit_2">
+     <widget class="QTextEdit" name="textEdit_chat">
       <property name="geometry">
        <rect>
         <x>13</x>
