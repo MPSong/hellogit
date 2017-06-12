@@ -125,7 +125,7 @@ void MainWindow::removeConnection()
          sock->flush();
      }*/
 
-
+    QString temptempRoom;
      if(arr.contains("$%*1")){  //log in
          QList<QByteArray> tempArr=arr.split('/');
          QByteArray id(tempArr.at(1));
@@ -457,6 +457,53 @@ void MainWindow::removeConnection()
          ui->textEdit->append(str + " room made");
          log->writeFile(s->localAddress().toString()+" room made");
          roomManager->createRoom(str);*/
+     }
+     else if(arr.contains("$%*4")){ //invite
+         QList<QByteArray> tempArr=arr.split('/');
+         QByteArray tempNick(tempArr.at(1));
+         QString tempNickName(tempArr.at(1));
+         temptempRoom=tempArr.at(2);
+
+         /*using nickNAme*/
+         for(int i=0; i<clientNickname.size(); i++){
+             if(clientNickname.at(i)==tempNickName){
+                 QTcpSocket* sock=socketList.at(i);
+                 sock->write("$$%*4/"+tempArr.at(1)); //notify that client to invite
+                 sock->flush();
+                 break;
+             }
+         }
+
+         ui->textEdit->append(tempNickName + " is invited ");
+         log->writeFile(tempNickName + " is invited ");
+
+
+
+     }
+     else if(arr.contains("$%*6")){  //accept invite
+         QList<QByteArray> tempArr=arr.split('/');
+         QByteArray tempNick(tempArr.at(1));
+         QString tempNickName(tempArr.at(1));
+
+         /*using nickNAme*/
+         for(int i=0; i<clientNickname.size(); i++){
+             if(clientNickname.at(i)==tempNickName){
+                 roomNames.replace(i, temptempRoom);
+                 break;
+             }
+         }
+
+         for(int i=0; i<roomNames.size(); i++){
+             if(roomNames.at(i)==temptempRoom){
+                 QTcpSocket* sock=socketList.at(i);
+                 sock->write("$$%*6/"+tempArr.at(1)); //notify that other client
+                 sock->flush();
+                 break;
+             }
+         }
+
+
+
      }
      else{         
          QString tempClientRoomname;
