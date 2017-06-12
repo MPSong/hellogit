@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /*데이터베이스 추가 및 경로와 연결*/
     mydb=QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/home/hyomin/다운로드/hellogit-master/user.db");
+    mydb.setDatabaseName("/home/hyomin/다운로드/hellogit-master (2)/user.db");
 
     if(!mydb.open())
     {
@@ -172,14 +172,14 @@ void MainWindow::removeConnection()
                  nickName = qry.value(0).toString();
 
                  /*send to client about success*/
-                 s->write("clear");
+                 s->write("$%*1/clear/"+ nickName.toUtf8());
                  s->flush();
 
              }
              //존재하지 않을 경우
              if(count<1)
              {
-                 s->write("Please check your id and password again");
+                 s->write("$%*1/fail");
                  s->flush();
              }
              ChatClient tempClient;
@@ -189,6 +189,7 @@ void MainWindow::removeConnection()
          }
 
      }
+
      else if(arr.contains("$%*0")){ //sign up
 
          /*사용자가 입력한 id, password, password확인, name, nickname 저장*/
@@ -200,7 +201,6 @@ void MainWindow::removeConnection()
 
          /*state를 notConnected로 초기화*/
          QString state("notConnected");
-         QString passconfirm(tempArr.at(6));
 
          /*데이터베이스가 오픈 불가능할 경우*/
          if(!mydb.isOpen()){
@@ -219,7 +219,7 @@ void MainWindow::removeConnection()
              }
              if(count==1)
              {
-                 s->write("Error Your id is duplicated");
+                 s->write("$%*0/idDuplicate");
                  s->flush();
                  return;
              }
@@ -234,7 +234,7 @@ void MainWindow::removeConnection()
              }
              if(count==1)
              {
-                 s->write("Error Your nickname is duplicated");
+                 s->write("$%*0/nickNameDuplicate");
                  s->flush();
                  return;
              }
@@ -244,17 +244,18 @@ void MainWindow::removeConnection()
          qry.prepare("insert into USER (UID,Password,Name,Nickname,State) values ('" + id + "','" + password + "', '" + name + "', '" + nickname + "', '" + state + "')");
 
          if(qry.exec()){
-             s->write("Saved");
+             s->write("$%*0/clear");
              s->flush();
          }
          else{
-             s->write("Error");
+             s->write("$%*0/Error");
              s->flush();
          }
 
          ui->textEdit->append(nickname + " is signup");
          log->writeFile(s->localAddress().toString()+" is signup");
      }
+
      else if(arr.contains("$%*-1")){  //id check
          /*사용자가 입력한 id 저장*/
          QList<QByteArray> tempArr=arr.split('/');
@@ -276,13 +277,13 @@ void MainWindow::removeConnection()
               }
               if(count==1)
               {
-                  s->write("you can not use this id");
+                  s->write("$$%*-1/fail");
                   s->flush();
               }
 
               if(count<1)
               {
-                  s->write("you can use this id");
+                  s->write("$$%*-1/clear");
                   s->flush();
               }
           }
@@ -308,13 +309,13 @@ void MainWindow::removeConnection()
              }
              if(count==1)
              {
-                 s->write("you can not use this nickname");
+                 s->write("$$%*-2/fail");
                  s->flush();
              }
 
              if(count<1)
              {
-                s->write("you can use this nickname");
+                s->write("$$%*-2/clear");
                 s->flush();
              }
          }
@@ -337,7 +338,7 @@ void MainWindow::removeConnection()
          QString temp2(temp);
          for(int i=0; i<clientList.size(); i++){
              QTcpSocket* sock=clientList[i].getTCP();
-             sock->write(temp);
+             sock->write("$%*2/" + temp);
              sock->flush();
          }
 
