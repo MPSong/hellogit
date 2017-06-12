@@ -90,7 +90,7 @@ void MainWindow::on_pushButton_logout_2_clicked()
     id = ui->lineEdit_id->text();
 
     QByteArray arr(nickName.toUtf8());
-     socket.write("$%*-3/" + arr);
+    socket.write("$%*-3/" + arr);
     socket.flush();
 
     ui->stackedWidget->setCurrentWidget(ui->page);
@@ -273,6 +273,7 @@ void MainWindow::on_pushButton_entrance_clicked()
         socket.flush();
 
         ui->stackedWidget->setCurrentWidget(ui->page_4);
+        ui->label_roomname->setText("chatting room: " + room);
     }
 
     else
@@ -305,5 +306,15 @@ void MainWindow::on_pushButton_invite_clicked()
 
 void MainWindow::on_pushButton_send_clicked()
 {
+    QByteArray arr("<" + nickName "> " + ui->textEdit_message->copy());
+    QByteArray arr("$%*2/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
+    socket.write(arr);
+    socket.flush();
+}
 
+
+void MainWindow::on_pushButton_attachment_clicked()
+{
+    dialogFTP = new DialogFTP(this);
+    dialogFTP->show();
 }

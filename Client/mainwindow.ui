@@ -454,7 +454,7 @@
        <string>send</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_13">
+     <widget class="QPushButton" name="pushButton_attachment">
       <property name="geometry">
        <rect>
         <x>510</x>
@@ -503,17 +503,17 @@
        <string>received file</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="label_roomname">
       <property name="geometry">
        <rect>
         <x>20</x>
         <y>20</y>
-        <width>121</width>
+        <width>341</width>
         <height>17</height>
        </rect>
       </property>
       <property name="text">
-       <string>chatting room 1</string>
+       <string/>
       </property>
      </widget>
     </widget>

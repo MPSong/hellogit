@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QTcpSocket>
 #include "dialog.h"
+#include "dialogftp.h"
 
 namespace Ui {
 class MainWindow;
@@ -51,12 +52,15 @@ private slots:
 
     void on_pushButton_send_clicked();
 
+    void on_pushButton_attachment_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase mydb;
     QTcpSocket socket;
     Dialog *dialog;
     QString nickName;
+    DialogFTP *dialogFTP;
 };
 
 #endif // MAINWINDOW_H

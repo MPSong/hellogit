@@ -25,10 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    dialog.cpp
+    dialog.cpp \
+    dialogftp.cpp \
+    ftpclient.cpp
 
 HEADERS  += mainwindow.h \
-    dialog.h
+    dialog.h \
+    dialogftp.h \
+    ftpclient.h
 
 FORMS    += mainwindow.ui \
-    dialog.ui
+    dialog.ui \
+    dialogftp.ui
