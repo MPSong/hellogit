@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /*데이터베이스 추가 및 경로와 연결*/
     mydb=QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/home/hyomin/다운로드/hellogit-master (2)/user.db");
+    mydb.setDatabaseName("/home/minpyo/MPSONG/GIT/hellogit/user.db");
 
     if(!mydb.open())
     {
@@ -35,10 +35,11 @@ MainWindow::MainWindow(QWidget *parent) :
         error.sprintf("cannot open log file");
         ui->textEdit->append(error);
     }
+/*
 
-    /*create roomManager*/
     roomManager=new RoomManager();
-
+*/
+    clientNum=0;
 }
 
 MainWindow::~MainWindow()
@@ -54,17 +55,6 @@ void MainWindow::startServer() //서버를 스타트하는 함수
     ui->textEdit->append(QString("wait for client"));
     //server start logging
     log->writeFile(QString("server start!"));
-}
-
-/*thread를 위한 함수, 일단 보*/
-void incomingConnection(qintptr socketDescriptor){
-   // QString usr;
-    //usr.sprintf("%s Connecting...", socketDescriptor);
-    //ChatThread *thread =new ChatThread(socketDescriptor, &server);
-
-    //connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
-    //thread->start();
 }
 
 void MainWindow::addConnection()
@@ -85,7 +75,7 @@ void MainWindow::addConnection()
 
     /*로깅 모듈을 이용해서 파일에 로그*/
     QString usr;
-    usr.sprintf("%dth usr is added", clientList.size());
+    usr.sprintf("%dth usr is added", socketList.size());
     ui->textEdit->append(usr);
     log->writeFile(s->localAddress().toString()+" is connected");//write on log file
 
@@ -103,17 +93,18 @@ void MainWindow::removeConnection()
     /*list에서 제거*/
     QTcpSocket* s = (QTcpSocket*)sender();
     //list.removeAll(s);
+    /*
     for(int i=0; i<clientList.size(); i++){
         if(clientList[i].getTCP()==s){
             clientList.removeAt(i);
             break;
         }
-    }
+    }*/
     s->deleteLater();
 
     /*여기서 로깅모듈에 unconnect 되었음을 알려준다.*/
     QString usr;
-    usr.sprintf("One usr leaves. Current number of usrs = %d\nwait for client", clientList.size());
+    usr.sprintf("One usr leaves. Current number of usrs = %d\nwait for client", socketList.size());
     ui->textEdit->append(usr);
     log->writeFile(s->localAddress().toString()+" is unconnected"); //write on log file
 
@@ -171,9 +162,22 @@ void MainWindow::removeConnection()
                  qry.next();
                  nickName = qry.value(0).toString();
 
-                 /*send to client about success*/
-                 s->write("$%*1/clear/"+ nickName.toUtf8());
-                 s->flush();
+                 /*save nickname, client*/
+                 clientNum++;
+                 socketList.append(s);
+                 roomNames.append("main");
+                 clientNickname.append(nickName);
+
+                 QString str1(nickName);
+                 ui->textEdit->append(str1 + " is connected");
+                 log->writeFile(nickName+" is connected");
+
+                 for(int i=0; i<socketList.size(); i++){
+                     QTcpSocket* sock=socketList.at(i);
+                     /*send to client about success*/
+                     sock->write("$%*1/clear/"+ nickName.toUtf8());
+                     sock->flush();
+                 }
 
              }
              //존재하지 않을 경우
@@ -182,9 +186,10 @@ void MainWindow::removeConnection()
                  s->write("$%*1/fail");
                  s->flush();
              }
+             /*
              ChatClient tempClient;
              tempClient.setClient(s, nickName);
-             clientList.append(tempClient);
+             clientList.append(tempClient);*/
              //roomManager->addClient(0, &tempClient);  //waiting room is index 0
          }
 
@@ -323,18 +328,60 @@ void MainWindow::removeConnection()
      else if(arr.contains("$%*-3")){  //logout
          QList<QByteArray> tempArr=arr.split('/');
          QString id(tempArr.at(1));
+         QString nickName(tempArr.at(2));
 
          /*데이터베이스에서 해당 id의 State값을 'unConnected'로 update*/
          QString state = "notConnected";
          QSqlQuery qry;
-         qry.exec("update USER set State = '" + state + "' where UID = '" + id + "'");
+         qry.exec("update USER set State = '" + state + "' where UID = '" + id + "'");     
 
-//room move
+         for(int i=0; i<socketList.size(); i++){
+             if(clientNickname.at(i)==nickName){
+                 QString tempRoom=roomNames.at(i);
+                 for(int j=0; j<roomNames.size(); j++){
+                     if(tempRoom==roomNames.at(j)){
+                         QTcpSocket* sock=socketList.at(j);
+                         sock->write("$$%*-3/"+tempArr.at(2)); //notify other client that this client logout
+                         sock->flush();
+                     }
+                 }
+
+                 socketList.removeAt(i);
+                 roomNames.removeAt(i);
+                 clientNickname.removeAt(i);
+                 clientNum--;
+
+                 break;
+             }
+         }
+
+         QString str2(nickName);
+         ui->textEdit->append(str2 + " is Unconnected");
+         log->writeFile(nickName+" is Unconnected");
 
      }
      else if(arr.contains("$%*2")){  //room make
          QList<QByteArray> tempArr=arr.split('/');
          QByteArray temp(tempArr.at(1));
+
+         /*using TCP*/
+         for(int i=0; i<socketList.size(); i++){
+             QTcpSocket* sock=socketList.at(i);
+             sock->write("$$%*2/"+temp); //notify other client that room made
+             sock->flush();
+         }
+
+         for(int i=0; i<roomNames.size(); i++){
+             if(socketList.at(i)==s){
+                 roomNames.replace(i, temp);
+                 break;
+             }
+         }
+
+         QString str2(temp);
+         ui->textEdit->append(str2 + " room is made");
+         log->writeFile(str2+" room is made");
+         /*
          QString temp2(temp);
          for(int i=0; i<clientList.size(); i++){
              QTcpSocket* sock=clientList[i].getTCP();
@@ -354,12 +401,40 @@ void MainWindow::removeConnection()
                  roomManager->moveClient(roomManager->getRoomNum(str), &tempClient);
                  clientList.replace(i, tempClient);
              }
-         }
+         }*/
 
      }
      else if(arr.contains("$%*3")){  //entrance
          QList<QByteArray> tempArr=arr.split('/');
          QByteArray temp(tempArr.at(1));
+         QByteArray temp2(tempArr.at(2));
+         QString str(tempArr.at(1));
+
+         /*using TCP*/
+         for(int i=0; i<socketList.size(); i++){
+             if(socketList.at(i)==s){
+                 roomNames.replace(i, str);
+                 break;
+             }
+         }
+
+         QString tempClient;
+         for(int i=0; i<roomNames.size(); i++){
+             if(roomNames.at(i)==str){
+                 /*using roomName*/
+                 tempClient=clientNickname.at(i);
+                 QTcpSocket* sock=socketList.at(i);
+                 sock->write("$$%*3/"+temp2); //notify other client that this client go inside room
+                 sock->flush();
+                 break;
+             }
+         }
+
+         ui->textEdit->append(tempClient + " go inside room "+ str);
+         log->writeFile(tempClient + " go inside room "+ str);
+
+
+         /*
          QString str(tempArr.at(1));
          for(int i=0; i<clientList.size(); i++){
              ChatClient tempClient=clientList.at(i);
@@ -381,9 +456,25 @@ void MainWindow::removeConnection()
 
          ui->textEdit->append(str + " room made");
          log->writeFile(s->localAddress().toString()+" room made");
-         roomManager->createRoom(str);
+         roomManager->createRoom(str);*/
      }
      else{         
+         QString tempClientRoomname;
+         for(int i=0; i<socketList.size(); i++){
+             if(socketList.at(i)==s){
+                 tempClientRoomname=roomNames.at(i);
+                 break;
+             }
+
+         }
+         for(int i=0; i<roomNames.size(); i++){
+             if(roomNames.at(i)==tempClientRoomname){
+                 QTcpSocket* sock=socketList.at(i);
+                 sock->write(arr);
+                 sock->flush();
+                 break;
+             }
+         }
          QString str(arr);
          ui->textEdit->append(str + " send message\nwait for client");
          log->writeFile(s->localAddress().toString()+" sends the message");

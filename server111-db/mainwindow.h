@@ -40,11 +40,17 @@ public slots:
 private:
     Logging *log;  //logging module
     //QList<QTcpSocket*> list;
-    QList<ChatClient> clientList;
+    //QList<ChatClient> clientList;
     QTcpServer server;
     Ui::MainWindow *ui;
     RoomManager *roomManager;
     QSqlDatabase mydb;
+
+    /*crazy coding*/
+    QList<QTcpSocket*> socketList;
+    QList<QString> roomNames;
+    QList<QString> clientNickname;
+    int clientNum;
 };
 
 #endif // MAINWINDOW_H
