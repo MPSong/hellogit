@@ -69,7 +69,7 @@ void MainWindow::on_pushButton_logout_clicked()
 
     /*send nickname to server*/
     QByteArray arr(nickName.toUtf8());
-    socket.write("$%*-3/" + arr);
+    socket.write("$%*-3/" + arr+"/"+nickName.toUtf8());
     socket.flush();
 
 
@@ -90,7 +90,7 @@ void MainWindow::on_pushButton_logout_2_clicked()
     id = ui->lineEdit_id->text();
 
     QByteArray arr(nickName.toUtf8());
-    socket.write("$%*-3/" + arr);
+    socket.write("$%*-3/" + arr+"/"+nickName.toUtf8());
     socket.flush();
 
     ui->stackedWidget->setCurrentWidget(ui->page);
@@ -275,7 +275,7 @@ void MainWindow::on_pushButton_entrance_clicked()
     {
         QString room = ui->listWidget_room->currentItem()->text();
 
-        QByteArray arr("$%*3/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
+        QByteArray arr("$%*3/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8()+"/"+nickName.toUtf8());
         socket.write(arr);
         socket.flush();
 

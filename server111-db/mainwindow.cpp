@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /*데이터베이스 추가 및 경로와 연결*/
     mydb=QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/home/minpyo/MPSONG/GIT/hellogit/user.db");
+    mydb.setDatabaseName("/home/mpsong/mpsong/hellogit-master/user.db");
 
     if(!mydb.open())
     {
@@ -173,10 +173,13 @@ void MainWindow::removeConnection()
                  log->writeFile(nickName+" is connected");
 
                  for(int i=0; i<socketList.size(); i++){
-                     QTcpSocket* sock=socketList.at(i);
-                     /*send to client about success*/
-                     sock->write("$%*1/clear/"+ nickName.toUtf8());
-                     sock->flush();
+                     if(roomNames.at(i)=="main"){
+                         QTcpSocket* sock=socketList.at(i);
+                         /*send to client about success*/
+                         sock->write("$%*1/clear/"+ nickName.toUtf8());
+                         sock->flush();
+                     }
+
                  }
 
              }
@@ -341,7 +344,8 @@ void MainWindow::removeConnection()
                  for(int j=0; j<roomNames.size(); j++){
                      if(tempRoom==roomNames.at(j)){
                          QTcpSocket* sock=socketList.at(j);
-                         sock->write("$$%*-3/"+tempArr.at(2)); //notify other client that this client logout
+                         QString kk="$$%*-3/"+tempArr.at(2);
+                         sock->write(kk.toUtf8()); //notify other client that this client logout
                          sock->flush();
                      }
                  }
@@ -366,9 +370,12 @@ void MainWindow::removeConnection()
 
          /*using TCP*/
          for(int i=0; i<socketList.size(); i++){
-             QTcpSocket* sock=socketList.at(i);
-             sock->write("$$%*2/"+temp); //notify other client that room made
-             sock->flush();
+             if(roomNames.at(i)=="main"){
+                 QTcpSocket* sock=socketList.at(i);
+                 QString kk="$$%*2/"+temp;
+                 sock->write(kk.toUtf8()); //notify other client that room made
+                 sock->flush();
+             }
          }
 
          for(int i=0; i<roomNames.size(); i++){
@@ -424,7 +431,8 @@ void MainWindow::removeConnection()
                  /*using roomName*/
                  tempClient=clientNickname.at(i);
                  QTcpSocket* sock=socketList.at(i);
-                 sock->write("$$%*3/"+temp2); //notify other client that this client go inside room
+                 QString kk="$$%*3/"+temp2;
+                 sock->write(kk.toUtf8()); //notify other client that this client go inside room
                  sock->flush();
                  break;
              }
@@ -468,7 +476,8 @@ void MainWindow::removeConnection()
          for(int i=0; i<clientNickname.size(); i++){
              if(clientNickname.at(i)==tempNickName){
                  QTcpSocket* sock=socketList.at(i);
-                 sock->write("$$%*4/"+tempArr.at(1)); //notify that client to invite
+                 QString kk="$$%*4/"+tempArr.at(1);
+                 sock->write(kk.toUtf8()); //notify that client to invite
                  sock->flush();
                  break;
              }
@@ -496,7 +505,8 @@ void MainWindow::removeConnection()
          for(int i=0; i<roomNames.size(); i++){
              if(roomNames.at(i)==temptempRoom){
                  QTcpSocket* sock=socketList.at(i);
-                 sock->write("$$%*6/"+tempArr.at(1)); //notify that other client
+                 QString kk="$$%*6/"+tempArr.at(1);
+                 sock->write(kk.toUtf8()); //notify that other client
                  sock->flush();
                  break;
              }
@@ -522,9 +532,10 @@ void MainWindow::removeConnection()
                  break;
              }
          }
+         /*
          QString str(arr);
          ui->textEdit->append(str + " send message\nwait for client");
-         log->writeFile(s->localAddress().toString()+" sends the message");
+         log->writeFile(s->localAddress().toString()+" sends the message");*/
      }
 
 
