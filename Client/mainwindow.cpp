@@ -175,7 +175,7 @@ void MainWindow::recvMsg()
              ui->stackedWidget->setCurrentWidget(ui->page_3);
              QByteArray temp2 = tempArr.at(2);
              str = temp2;
-             nickName = temp2;
+             nickName = tempArr.at(2);
              ui->label_welcome->setText(nickName + " welcome!");
              ui->label_welcome_2->setText(nickName + " welcome!");
         }
