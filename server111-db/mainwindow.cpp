@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /*데이터베이스 추가 및 경로와 연결*/
     mydb=QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("/home/mpsong/mpsong/hellogit-master/user.db");
+    mydb.setDatabaseName("/home/hyomin/다운로드/hellogit-master/user.db");
 
     if(!mydb.open())
     {
@@ -172,14 +172,16 @@ void MainWindow::removeConnection()
                  ui->textEdit->append(str1 + " is connected");
                  log->writeFile(nickName+" is connected");
 
+                 s->write("$%*1/clear/"+ nickName.toUtf8());
+                 s->flush();
+
                  for(int i=0; i<socketList.size(); i++){
                      if(roomNames.at(i)=="main"){
                          QTcpSocket* sock=socketList.at(i);
                          /*send to client about success*/
-                         sock->write("$%*1/clear/"+ nickName.toUtf8());
+                         sock->write("$%*4/"+ nickName.toUtf8());
                          sock->flush();
                      }
-
                  }
 
              }
