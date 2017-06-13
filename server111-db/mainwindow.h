@@ -43,9 +43,9 @@ private:
     //QList<ChatClient> clientList;
     QTcpServer server;
     Ui::MainWindow *ui;
-    RoomManager *roomManager;
     QSqlDatabase mydb;
 
+    QString roomManager;
     /*crazy coding*/
     QList<QTcpSocket*> socketList;
     QList<QString> roomNames;

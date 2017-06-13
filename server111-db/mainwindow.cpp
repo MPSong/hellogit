@@ -376,6 +376,7 @@ void MainWindow::removeConnection()
      else if(arr.contains("$%*2")){  //room make
          QList<QByteArray> tempArr=arr.split('/');
          QByteArray temp(tempArr.at(1));
+         QByteArray temp2(tempArr.at(2));
 
          /*using TCP*/
          for(int i=0; i<socketList.size(); i++){
@@ -397,6 +398,8 @@ void MainWindow::removeConnection()
          QString str2(temp);
          ui->textEdit->append(str2 + " room is made");
          log->writeFile(str2+" room is made");
+         QString kkkk(temp2);
+         roomManager=kkkk;
          /*
          QString temp2(temp);
          for(int i=0; i<clientList.size(); i++){
@@ -425,55 +428,35 @@ void MainWindow::removeConnection()
          QByteArray temp(tempArr.at(1));
          QByteArray temp2(tempArr.at(2));
          QString str(tempArr.at(1));
+         QString str2(tempArr.at(2));
 
          /*using TCP*/
-         for(int i=0; i<socketList.size(); i++){
-             if(socketList.at(i)==s){
+         for(int i=0; i<clientNickname.size(); i++){
+             if(clientNickname.at(i)==str2){
                  roomNames.replace(i, str);
                  break;
              }
          }
-
+        QString bol("nothing");
+         if(str2==roomManager){
+             bol="IM";
+         }
          QString tempClient;
          for(int i=0; i<roomNames.size(); i++){
-             if(roomNames.at(i)==str){
+
                  /*using roomName*/
                  tempClient=clientNickname.at(i);
+                 ui->textEdit->append(tempClient + " go inside room "+ str);
+                 log->writeFile(tempClient + " go inside room "+ str);
                  QTcpSocket* sock=socketList.at(i);
-                 QString kk="$$%*3/"+temp2;
+                 QString kk="$$%*3/"+temp2+"/"+bol;
                  sock->write(kk.toUtf8()); //notify other client that this client go inside room
                  sock->flush();
-                 break;
-             }
-         }
 
-         ui->textEdit->append(tempClient + " go inside room "+ str);
-         log->writeFile(tempClient + " go inside room "+ str);
-
-
-         /*
-         QString str(tempArr.at(1));
-         for(int i=0; i<clientList.size(); i++){
-             ChatClient tempClient=clientList.at(i);
-             QString clientNickname=tempClient.getNickName();
-             if(clientNickname==str){
-                 roomManager->moveClient(roomManager->getRoomNum(str), &tempClient);
-                 clientList.replace(i, tempClient);
-             }
-         }
-
-         for(int i=0; i<clientList.size(); i++){
-
-             QTcpSocket* sock=clientList[i].getTCP();
-             sock->write(temp);
-             sock->flush();
          }
 
 
 
-         ui->textEdit->append(str + " room made");
-         log->writeFile(s->localAddress().toString()+" room made");
-         roomManager->createRoom(str);*/
      }
      else if(arr.contains("$%*4")){ //invite
          QList<QByteArray> tempArr=arr.split('/');
@@ -485,7 +468,7 @@ void MainWindow::removeConnection()
          for(int i=0; i<clientNickname.size(); i++){
              if(clientNickname.at(i)==tempNickName){
                  QTcpSocket* sock=socketList.at(i);
-                 QString kk="$$%*4/"+tempArr.at(1);
+                 QString kk="$$%*6/"+roomNames.at(1);
                  sock->write(kk.toUtf8()); //notify that client to invite
                  sock->flush();
                  break;
@@ -533,13 +516,14 @@ void MainWindow::removeConnection()
              }
 
          }
+
          for(int i=0; i<roomNames.size(); i++){
-             if(roomNames.at(i)==tempClientRoomname){
+             //if(roomNames.at(i)==tempClientRoomname){
                  QTcpSocket* sock=socketList.at(i);
                  sock->write(arr);
                  sock->flush();
-                 break;
-             }
+                 //break;
+             //}
          }
          /*
          QString str(arr);

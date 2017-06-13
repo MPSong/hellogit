@@ -235,13 +235,33 @@ void MainWindow::recvMsg()
         str = temp;
         ui->listWidget_room->addItem(str);
     }
-
-    //users
     else if(arr.contains("$%*4")){
         tempArr=arr.split('/');
         temp = tempArr.at(1);
         str = temp;
         ui->listWidget_users->addItem(str);
+        //ui->listWidget_users->addItem(nickName);
+    }
+    else if(arr.contains("$%*3")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        QByteArray temp2=tempArr.at(2);
+        QString str2=temp2;
+        str = temp;
+        ui->listWidget_users->addItem(str);
+        if(str2.contains("nothing")){
+            ui->listWidget_users->addItem(nickName);
+        }
+    }
+
+    //users
+    else if(arr.contains("$%*6")){
+        tempArr=arr.split('/');
+        temp = tempArr.at(1);
+        str = temp;
+        ui->stackedWidget->setCurrentWidget(ui->page_4);
+        ui->label_roomname->setText("chatting room: " + str);
+        //ui->listWidget_users->addItem(str);
     }
 
     else if(arr.contains("$%*5")){
@@ -249,13 +269,14 @@ void MainWindow::recvMsg()
         temp = tempArr.at(1);
         str = temp;
         ui->textEdit_chat->append(str);
+
     }
 
 }
 
 void MainWindow::onSent(const QString& room)
 {
-    QByteArray arr("$%*2/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8());
+    QByteArray arr("$%*2/"+room.toUtf8()+"/"+nickName.toUtf8());
     socket.write(arr);
     socket.flush();
 }
@@ -275,7 +296,7 @@ void MainWindow::on_pushButton_entrance_clicked()
     {
         QString room = ui->listWidget_room->currentItem()->text();
 
-        QByteArray arr("$%*3/"+room.toUtf8()+"/"+socket.localAddress().toString().toUtf8()+"/"+nickName.toUtf8());
+        QByteArray arr("$%*3/"+room.toUtf8()+"/"+nickName.toUtf8());
         socket.write(arr);
         socket.flush();
 
