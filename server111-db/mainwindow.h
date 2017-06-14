@@ -1,9 +1,8 @@
 /*---------------------------------------
 시작일시: 2017. 05. 21(일)
-최종일시: 2017. 05. 25(일)
+최종일시: 2017. 06. 14
 이전 작성자: 송민표
 최종 작성자: 송민표
-logmodule 추가
 -----------------------------------------*/
 
 #ifndef MAINWINDOW_H
@@ -28,7 +27,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void startServer(); //서버를 스타트하는 함수
-    void incomingConnection(qintptr socketDescriptor);
 
     ~MainWindow();
 signals:
@@ -39,8 +37,6 @@ public slots:
     void recvMsg();
 private:
     Logging *log;  //logging module
-    //QList<QTcpSocket*> list;
-    //QList<ChatClient> clientList;
     QTcpServer server;
     Ui::MainWindow *ui;
     QSqlDatabase mydb;

@@ -1,8 +1,7 @@
 /*-------------------------
-최종 작성 일시: 2017. 05. 25
-이전 작성자:
-최종 작성자: 김효민
-로그인, 로그아웃, 회원가입 구현
+최종 작성 일시: 2017. 06. 14
+이전 작성자: 김효민
+최종 작성자: 송민표
 --------------------------*/
 
 #include "mainwindow.h"
@@ -162,10 +161,6 @@ void MainWindow::recvMsg()
     QList<QByteArray> tempArr;
     QByteArray temp;
     QString str;
-/*
-    str = arr;
-    ui->listWidget_room->addItem(str);
-    */
 
     //sign in
     if(arr.contains("$%*1")){
@@ -261,7 +256,7 @@ void MainWindow::recvMsg()
         str = temp;
         ui->stackedWidget->setCurrentWidget(ui->page_4);
         ui->label_roomname->setText("chatting room: " + str);
-        //ui->listWidget_users->addItem(str);
+      
     }
 
     else if(arr.contains("$%*5")){
